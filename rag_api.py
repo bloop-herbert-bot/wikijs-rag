@@ -21,7 +21,7 @@ except ImportError:
     sys.exit(1)
 
 # Configuration
-OLLAMA_BASE_URL = "http://192.168.0.118:11434"
+OLLAMA_BASE_URL = "http://192.168.0.204:11434"  # Alternative: 192.168.10.24
 CHROMA_PERSIST_DIR = "./chromadb"
 COLLECTION_NAME = "wikijs"
 

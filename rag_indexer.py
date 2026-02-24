@@ -21,7 +21,7 @@ from langchain_core.documents import Document
 # Configuration
 WIKI_API_URL = "http://192.168.0.252:3000/graphql"
 WIKI_API_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGkiOjQsImdycCI6MSwiaWF0IjoxNzcxOTQ4MTc2LCJleHAiOjE4NjY2MjA5NzYsImF1ZCI6InVybjp3aWtpLmpzIiwiaXNzIjoidXJuOndpa2kuanMifQ.IeqS7egEqjzi_h4BtOgrMBOI2Sj3nSQOmpb0rfqbBEe_-rr2_LHW7WbdRdFAzZLmrVfUxNUxAS2mqfWRutDzFRssTM1evQehATO88aiXybhGviy-ROa8phBTKgGf4okLEWw6ZPkqk7RoNZAyW_cGlTGG1ObcZXknZzfL8AGIqqcf_aNXDYzE4xLpp-J3I4Aek-hl3sDetd_Ch3e_4e-IIdy0n05M3ew7Q_ITh-iRj0rdDZRX5rphH7nG6lJXWBeca81ks1aKeL6GwBUWPO-R1YDjjfSchP_s8HU1_yIpA2eXyObKXSVIgmYOquF-B4Zf-OHufU9PQ-di-ojWHx_gRw"
-OLLAMA_BASE_URL = "http://192.168.0.118:11434"
+OLLAMA_BASE_URL = "http://192.168.0.204:11434"  # Alternative: 192.168.10.24
 CHROMA_PERSIST_DIR = "./chromadb"
 COLLECTION_NAME = "wikijs"
 
