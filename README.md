@@ -240,54 +240,36 @@ Response:
 
 ---
 
-## 🔄 Updating the Index
+## 🔄 Auto-Reindexing
 
-Run the indexer periodically to keep your RAG up-to-date:
+Keep ChromaDB synchronized with Wiki.js automatically.
 
-**Manual:**
+### Quick Setup
+
+**1. Test the sync script:**
 ```bash
-python3 rag_indexer.py
+./sync_wikijs.sh
 ```
 
-**Automated (Cron):**
+**2. Schedule with cron:**
 ```bash
 crontab -e
-
-# Reindex daily at 2 AM
-0 2 * * * cd /path/to/wikijs-rag && ./venv/bin/python3 rag_indexer.py >> /tmp/rag_reindex.log 2>&1
+# Add: 0 2 * * * /path/to/wikijs-rag/sync_wikijs.sh >> /tmp/rag_reindex.log 2>&1
 ```
 
-**Automated (Systemd Timer):**
-
-Create `/etc/systemd/system/wikijs-rag-reindex.service`:
-```ini
-[Unit]
-Description=Wiki.js RAG Reindex
-
-[Service]
-Type=oneshot
-User=your-user
-WorkingDirectory=/path/to/wikijs-rag
-ExecStart=/path/to/wikijs-rag/venv/bin/python3 rag_indexer.py
-```
-
-Create `/etc/systemd/system/wikijs-rag-reindex.timer`:
-```ini
-[Unit]
-Description=Wiki.js RAG Reindex Timer
-
-[Timer]
-OnCalendar=daily
-Persistent=true
-
-[Install]
-WantedBy=timers.target
-```
-
-Enable:
+**3. Or use OpenClaw cron:**
 ```bash
-sudo systemctl enable wikijs-rag-reindex.timer
-sudo systemctl start wikijs-rag-reindex.timer
+openclaw cron add --name "Wiki.js RAG Sync" --schedule "0 2 * * *" \
+  --command "/path/to/wikijs-rag/sync_wikijs.sh"
+```
+
+**📚 Full guide:** See [AUTO_REINDEX.md](AUTO_REINDEX.md) for detailed setup, monitoring, and troubleshooting.
+
+### Manual Reindex
+
+Run indexer directly:
+```bash
+python3 rag_indexer.py
 ```
 
 ---
