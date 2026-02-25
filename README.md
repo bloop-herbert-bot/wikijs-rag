@@ -510,6 +510,70 @@ pip install -r requirements.txt
 
 ---
 
+## 🔌 OpenClaw Integration
+
+**Native agent tool for semantic Wiki.js search**
+
+### Quick Setup
+
+1. **Copy plugin to OpenClaw:**
+   ```bash
+   cp -r openclaw-plugin ~/.openclaw/plugins/wikijs-search
+   ```
+
+2. **Enable plugin in OpenClaw config:**
+   ```bash
+   # Edit ~/.openclaw/openclaw.json
+   {
+     "plugins": {
+       "installed": ["wikijs-search"]
+     }
+   }
+   ```
+
+3. **Restart OpenClaw:**
+   ```bash
+   openclaw gateway restart
+   ```
+
+### Usage in Agents
+
+The `wikijs_search` tool is automatically available:
+
+```
+User: What is the IP address of ioBroker?
+
+Agent: Let me search the documentation...
+[calls wikijs_search({query: "ioBroker IP address", top_k: 3})]
+
+According to Container/iobroker page, ioBroker runs on 192.168.0.110.
+```
+
+**Tool Parameters:**
+- `query` (string, required): Natural language search query
+- `top_k` (number, optional, default 3): Number of results (1-10)
+- `filter_path` (string, optional): Filter by Wiki.js path prefix
+
+**Optional Health Check:**
+
+Enable `wikijs_health` tool in agent config for API status monitoring:
+```json
+{
+  "agents": {
+    "list": [{
+      "id": "main",
+      "tools": {
+        "allow": ["wikijs_health"]
+      }
+    }]
+  }
+}
+```
+
+See `openclaw-plugin/README.md` for detailed documentation.
+
+---
+
 ## 🤝 Contributing
 
 Contributions welcome! Please:
