@@ -9,25 +9,31 @@ and stores them in ChromaDB for semantic search.
 import requests
 import json
 import sys
+import os
 from datetime import datetime
 from typing import List, Dict
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # LangChain imports
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_ollama import OllamaEmbeddings
+from langchain_chroma import Chroma
 from langchain_core.documents import Document
 
-# Configuration
-WIKI_API_URL = "http://192.168.0.252:3000/graphql"
-WIKI_API_TOKEN = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGkiOjQsImdycCI6MSwiaWF0IjoxNzcxOTQ4MTc2LCJleHAiOjE4NjY2MjA5NzYsImF1ZCI6InVybjp3aWtpLmpzIiwiaXNzIjoidXJuOndpa2kuanMifQ.IeqS7egEqjzi_h4BtOgrMBOI2Sj3nSQOmpb0rfqbBEe_-rr2_LHW7WbdRdFAzZLmrVfUxNUxAS2mqfWRutDzFRssTM1evQehATO88aiXybhGviy-ROa8phBTKgGf4okLEWw6ZPkqk7RoNZAyW_cGlTGG1ObcZXknZzfL8AGIqqcf_aNXDYzE4xLpp-J3I4Aek-hl3sDetd_Ch3e_4e-IIdy0n05M3ew7Q_ITh-iRj0rdDZRX5rphH7nG6lJXWBeca81ks1aKeL6GwBUWPO-R1YDjjfSchP_s8HU1_yIpA2eXyObKXSVIgmYOquF-B4Zf-OHufU9PQ-di-ojWHx_gRw"
-OLLAMA_BASE_URL = "http://192.168.0.204:11434"  # Alternative: 192.168.10.24
-CHROMA_PERSIST_DIR = "./chromadb"
-COLLECTION_NAME = "wikijs"
+# Configuration from environment variables
+WIKI_API_URL = os.getenv("WIKI_API_URL", "http://localhost:3000/graphql")
+WIKI_API_TOKEN = os.getenv("WIKI_API_TOKEN", "")
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_EMBEDDING_MODEL = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
+CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chromadb")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "wikijs")
 
 # Chunking config
-CHUNK_SIZE = 512
-CHUNK_OVERLAP = 50
+CHUNK_SIZE = int(os.getenv("CHUNK_SIZE", "512"))
+CHUNK_OVERLAP = int(os.getenv("CHUNK_OVERLAP", "50"))
 
 
 def fetch_all_wiki_pages() -> List[Dict]:
@@ -41,7 +47,6 @@ def fetch_all_wiki_pages() -> List[Dict]:
           path
           title
           description
-          tags
           updatedAt
         }
       }
@@ -91,7 +96,9 @@ def fetch_all_wiki_pages() -> List[Dict]:
                   title
                   content
                   description
-                  tags
+                  tags {{
+                    tag
+                  }}
                   updatedAt
                 }}
               }}
@@ -154,7 +161,7 @@ def chunk_pages(pages: List[Dict]) -> List[Document]:
                     "path": page["path"],
                     "title": page["title"],
                     "description": page.get("description", ""),
-                    "tags": ",".join(page.get("tags", [])),
+                    "tags": ",".join([t["tag"] if isinstance(t, dict) else t for t in page.get("tags", [])]),
                     "updated_at": page.get("updatedAt", ""),
                     "chunk_index": i,
                     "total_chunks": len(chunks)
@@ -173,7 +180,7 @@ def index_documents(documents: List[Document]) -> None:
     try:
         # Init Ollama Embeddings
         embeddings = OllamaEmbeddings(
-            model="nomic-embed-text",
+            model=OLLAMA_EMBEDDING_MODEL,
             base_url=OLLAMA_BASE_URL
         )
         

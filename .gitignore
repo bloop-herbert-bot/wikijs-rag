@@ -1,0 +1,40 @@
+# Environment variables (contains secrets!)
+.env
+.env.local
+.env.test
+
+# ChromaDB storage
+chromadb/
+chromadb_*/
+
+# SQLite databases
+*.sqlite
+*.db
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+test_*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
