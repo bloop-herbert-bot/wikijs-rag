@@ -1,0 +1,10 @@
+{
+  "name": "wikijs-search",
+  "version": "1.0.0",
+  "description": "Semantic search across Wiki.js documentation using RAG",
+  "main": "index.mjs",
+  "type": "module",
+  "keywords": ["wikijs", "rag", "search", "semantic"],
+  "author": "herbert",
+  "license": "MIT"
+}
