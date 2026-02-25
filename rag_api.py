@@ -10,20 +10,28 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from typing import List, Dict, Optional
 import sys
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # LangChain imports
 try:
-    from langchain_community.embeddings import OllamaEmbeddings
-    from langchain_community.vectorstores import Chroma
+    from langchain_ollama import OllamaEmbeddings
+    from langchain_chroma import Chroma
 except ImportError:
     print("❌ Missing dependencies. Install with:")
-    print("   pip install fastapi uvicorn langchain langchain-community chromadb")
+    print("   pip install fastapi uvicorn langchain-ollama langchain-chroma python-dotenv")
     sys.exit(1)
 
-# Configuration
-OLLAMA_BASE_URL = "http://192.168.0.204:11434"  # Alternative: 192.168.10.24
-CHROMA_PERSIST_DIR = "./chromadb"
-COLLECTION_NAME = "wikijs"
+# Configuration from environment variables
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
+OLLAMA_EMBEDDING_MODEL = os.getenv("OLLAMA_EMBEDDING_MODEL", "nomic-embed-text")
+CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chromadb")
+COLLECTION_NAME = os.getenv("COLLECTION_NAME", "wikijs")
+API_HOST = os.getenv("API_HOST", "0.0.0.0")
+API_PORT = int(os.getenv("API_PORT", "8765"))
 
 # FastAPI App
 app = FastAPI(
@@ -47,7 +55,7 @@ async def startup_event():
     try:
         # Init Ollama Embeddings
         embeddings = OllamaEmbeddings(
-            model="nomic-embed-text",
+            model=OLLAMA_EMBEDDING_MODEL,
             base_url=OLLAMA_BASE_URL
         )
         
@@ -201,4 +209,4 @@ async def query_wiki(request: QueryRequest):
 # Development mode
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8765, reload=True)
+    uvicorn.run(app, host=API_HOST, port=API_PORT, reload=True)
