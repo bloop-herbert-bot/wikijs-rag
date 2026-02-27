@@ -1,0 +1,74 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ⚠️ Security Warning
+        
+        **NEVER post credentials, tokens, passwords, or API keys in this issue!**
+        
+        - Use `.env.example` for configuration examples
+        - Redact sensitive information from logs
+        - See [SECURITY.md](../SECURITY.md) for reporting security issues
+        
+        ---
+  
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: Clear description of the bug
+      placeholder: "What happened?"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this?
+      placeholder: |
+        1. Run `python3 rag_indexer.py`
+        2. See error...
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+    validations:
+      required: true
+  
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Paste relevant logs (REDACT any tokens/passwords!)
+      render: shell
+  
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      placeholder: "e.g., 3.11.5"
+    validations:
+      required: true
+  
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      placeholder: "e.g., Ubuntu 22.04, macOS 14"
+    validations:
+      required: true
+  
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information
