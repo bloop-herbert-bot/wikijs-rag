@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/bloop-herbert-bot/wikijs-rag/security/advisories/new
+    about: Report a security issue privately
+  - name: 💬 Discussions
+    url: https://github.com/bloop-herbert-bot/wikijs-rag/discussions
+    about: Ask questions and discuss ideas
